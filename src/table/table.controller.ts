@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
+import { CreateTableDto } from './Dto/create-table.dto';
 import { TableService } from './table.service';
 
 @Controller('table')
@@ -12,7 +13,7 @@ export class TableController {
   }
 
   @Post()
-  create() {
+  create(@Body() createTableDto: CreateTableDto) {
     return this.tableService.create();
     
   }
