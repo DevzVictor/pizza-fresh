@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { CreateTableDto } from './Dto/create-table.dto';
+import { CreateTableDto } from './dto/create-table.dto';
 import { Table } from './entities/table.entity';
 
 @Injectable()
