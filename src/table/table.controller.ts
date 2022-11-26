@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateTableDto } from './dto/create-table.dto';
+import { UpdateTableDto } from './dto/update-table.dto';
 import { Table } from './entities/table.entity';
 import { TableService } from './table.service';
 
@@ -28,9 +29,17 @@ export class TableController {
 
   @Post()
   @ApiOperation({
-    summary: "Criar uma mesas"
+    summary: "Criar uma mesa"
   })
   create(@Body() dto: CreateTableDto): Promise<Table> {
     return this.tableService.create(dto);
+  }
+
+  @Patch(':id')
+  @ApiOperation({
+    summary: "Editar uma mesa pelo ID"
+  })
+  update(@Param('id') id: string, @Body() dto: UpdateTableDto): Promise<Table>{
+    return this.tableService.update(id, dto);
   }
 }

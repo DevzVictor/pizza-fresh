@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTableDto } from './dto/create-table.dto';
+import { UpdateTableDto } from './dto/update-table.dto';
 import { Table } from './entities/table.entity';
 
 @Injectable()
@@ -25,6 +26,15 @@ export class TableService {
     const table: Table = { ...dto, id: randomUUID() };
 
     return this.prisma.table.create({
+      data: table,
+    });
+  }
+
+  update(id: string, dto: UpdateTableDto): Promise<Table> {
+    const table: Partial<Table> = { ...dto };
+
+    return this.prisma.table.update({
+      where: { id },
       data: table,
     });
   }
