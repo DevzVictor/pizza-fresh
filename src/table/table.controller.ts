@@ -1,5 +1,15 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Param, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Patch,
+  Delete,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateTableDto } from './dto/create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
@@ -13,7 +23,7 @@ export class TableController {
 
   @Get()
   @ApiOperation({
-    summary: "Visualizar todas mesas"
+    summary: 'Visualizar todas mesas',
   })
   findAll(): Promise<Table[]> {
     return this.tableService.findAll();
@@ -21,7 +31,7 @@ export class TableController {
 
   @Get(':id')
   @ApiOperation({
-    summary: "Visualizar uma mesas"
+    summary: 'Visualizar uma mesas',
   })
   findOne(@Param('id') id: string): Promise<Table> {
     return this.tableService.findOne(id);
@@ -29,7 +39,7 @@ export class TableController {
 
   @Post()
   @ApiOperation({
-    summary: "Criar uma mesa"
+    summary: 'Criar uma mesa',
   })
   create(@Body() dto: CreateTableDto): Promise<Table> {
     return this.tableService.create(dto);
@@ -37,9 +47,18 @@ export class TableController {
 
   @Patch(':id')
   @ApiOperation({
-    summary: "Editar uma mesa pelo ID"
+    summary: 'Editar uma mesa pelo ID',
   })
-  update(@Param('id') id: string, @Body() dto: UpdateTableDto): Promise<Table>{
+  update(@Param('id') id: string, @Body() dto: UpdateTableDto): Promise<Table> {
     return this.tableService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Remover uma mesa pelo ID',
+  })
+  delete(@Param('id') id: string) {
+    this.tableService.delete(id);
   }
 }
