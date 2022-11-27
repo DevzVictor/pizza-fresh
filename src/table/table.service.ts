@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTableDto } from './dto/create-table.dto';
@@ -14,12 +14,18 @@ export class TableService {
     return this.prisma.table.findMany();
   }
 
-  findOne(id: string): Promise<Table> {
-    return this.prisma.table.findUnique({
+  async findOne(id: string): Promise<Table> {
+    const record = await this.prisma.table.findUnique({
       where: {
         id: id,
       },
     });
+
+    if (!record) {
+      throw new NotFoundException(`Registro com o ID '${id}' não encontrado`);
+    }
+
+    return record;
   }
 
   create(dto: CreateTableDto): Promise<Table> {
