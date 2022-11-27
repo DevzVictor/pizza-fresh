@@ -1,5 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTableDto } from './dto/create-table.dto';
@@ -35,9 +39,11 @@ export class TableService {
   create(dto: CreateTableDto): Promise<Table> {
     const table: Table = { ...dto, id: randomUUID() };
 
-    return this.prisma.table.create({
-      data: table,
-    });
+    return this.prisma.table
+      .create({
+        data: table,
+      })
+      .catch(this.handleError);
   }
 
   async update(id: string, dto: UpdateTableDto): Promise<Table> {
@@ -45,10 +51,12 @@ export class TableService {
 
     const table: Partial<Table> = { ...dto };
 
-    return this.prisma.table.update({
-      where: { id },
-      data: table,
-    });
+    return this.prisma.table
+      .update({
+        where: { id },
+        data: table,
+      })
+      .catch(this.handleError);
   }
 
   async delete(id: string) {
@@ -57,5 +65,14 @@ export class TableService {
     await this.prisma.table.delete({
       where: { id },
     });
+  }
+
+  //tratamentos de erros
+  handleError(error: Error): undefined {
+    const errorLines = error.message?.split('\n');
+    const lastErrorLine = errorLines[errorLines.length - 1]?.trim();
+    throw new UnprocessableEntityException(
+      lastErrorLine || 'Algum error ocorreu ao executar a operação',
+    );
   }
 }
