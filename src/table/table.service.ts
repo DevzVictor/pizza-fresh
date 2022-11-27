@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 import {
   Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
+  NotFoundException
 } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { handleError } from 'src/utils/handle-error.util';
 import { CreateTableDto } from './dto/create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
 import { Table } from './entities/table.entity';
@@ -43,7 +43,7 @@ export class TableService {
       .create({
         data: table,
       })
-      .catch(this.handleError);
+      .catch(handleError);
   }
 
   async update(id: string, dto: UpdateTableDto): Promise<Table> {
@@ -56,7 +56,7 @@ export class TableService {
         where: { id },
         data: table,
       })
-      .catch(this.handleError);
+      .catch(handleError);
   }
 
   async delete(id: string) {
@@ -67,12 +67,4 @@ export class TableService {
     });
   }
 
-  //tratamentos de erros
-  handleError(error: Error): undefined {
-    const errorLines = error.message?.split('\n');
-    const lastErrorLine = errorLines[errorLines.length - 1]?.trim();
-    throw new UnprocessableEntityException(
-      lastErrorLine || 'Algum error ocorreu ao executar a operação',
-    );
-  }
 }
