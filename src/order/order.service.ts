@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Product } from 'src/product/entities/product.entity';
 import { handleError } from 'src/utils/handle-error.util';
+import { CreateOrderProductDto } from './dto/create-order-product.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 
 @Injectable()
@@ -21,12 +23,34 @@ export class OrderService {
         },
       },
       products: {
-        connect: createOrderDto.products.map((productId) => ({
-          id: productId,
-        })),
+        createMany: {
+          data: createOrderDto.products.map((CreateOrderProductDto) => ({
+            productId: CreateOrderProductDto.productId,
+            quantity: CreateOrderProductDto.quantity,
+            description: CreateOrderProductDto.description,
+          })),
+        },
       },
 
-      // referencia da logica acima
+      //referencia logica para many-to-many implicit
+      // products: {
+      //   createMany: {
+      //     data: [
+      //       {
+      //         productId: createOrderDto.products[0],
+      //         quantity: 1,
+      //         description: 'text',
+      //       },
+      //       {
+      //         productId: createOrderDto.products[0],
+      //         quantity: 1,
+      //         description: 'text',
+      //       },
+      //     ],
+      //   },
+      // },
+
+      // referencia da logica para (many-to-many explicito)
       // products: {
       //   connect: [
       //     {
@@ -46,7 +70,13 @@ export class OrderService {
           id: true,
           table: { select: { number: true } },
           user: { select: { name: true } },
-          products: { select: { name: true } },
+          products: {
+            select: {
+              quantity: true,
+              description: true,
+              product: { select: { name: true } },
+            },
+          },
         },
       })
       .catch(handleError);
@@ -98,11 +128,15 @@ export class OrderService {
         },
         products: {
           select: {
-            id: true,
-            name: true,
-            price: true,
-            image: true,
-            description: true,
+            product: {
+              select: {
+                id: true,
+                name: true,
+                price: true,
+                image: true,
+                description: true,
+              },
+            },
           },
         },
       },
