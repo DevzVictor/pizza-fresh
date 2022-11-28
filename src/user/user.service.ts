@@ -27,7 +27,9 @@ export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({
+      select: this.userSelect,
+    });
   }
 
   async findById(id: string): Promise<User> {
@@ -35,6 +37,7 @@ export class UserService {
       where: {
         id: id,
       },
+      select: this.userSelect,
     });
 
     if (!record) {
@@ -73,7 +76,7 @@ export class UserService {
     await this.findById(id);
 
     if (dto.password) {
-      if (dto.password != dto.confirmPassword) {
+      if (dto.password !== dto.confirmPassword) {
         throw new BadRequestException('As senhas informadas não são iguais');
       }
     }
