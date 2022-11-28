@@ -32,7 +32,7 @@ export class OrderService {
         },
       },
 
-      //referencia logica para many-to-many implicit
+      // referencia logica para many-to-many explicit
       // products: {
       //   createMany: {
       //     data: [
@@ -50,7 +50,7 @@ export class OrderService {
       //   },
       // },
 
-      // referencia da logica para (many-to-many explicito)
+      // referencia da logica para (many-to-many implicit)
       // products: {
       //   connect: [
       //     {
