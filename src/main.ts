@@ -25,7 +25,7 @@ async function bootstrap(): Promise<void> {
     .addTag('product')
     .addTag('user')
     .addTag('order')
-    .addBasicAuth()
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
