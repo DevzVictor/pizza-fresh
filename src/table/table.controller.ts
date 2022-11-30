@@ -62,7 +62,7 @@ export class TableController {
   @ApiOperation({
     summary: 'Remover uma mesa pelo ID',
   })
-  delete(@Param('id') id: string) {
+  delete(@Param('id') id: string): void {
     this.tableService.delete(id);
   }
 }

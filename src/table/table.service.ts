@@ -4,8 +4,8 @@ import {
   NotFoundException
 } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { handleError } from 'src/utils/handle-error.util';
+import { PrismaService } from '../prisma/prisma.service';
+import { handleError } from '../utils/handle-error.util';
 import { CreateTableDto } from './dto/create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
 import { Table } from './entities/table.entity';
@@ -59,7 +59,7 @@ export class TableService {
       .catch(handleError);
   }
 
-  async delete(id: string) {
+  async delete(id: string): Promise<void> {
     await this.findById(id);
 
     await this.prisma.table.delete({
