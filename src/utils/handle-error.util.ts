@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { UnprocessableEntityException } from "@nestjs/common";
+import { UnprocessableEntityException } from '@nestjs/common';
 
 //tratamentos de erros
 export function handleError(error: Error): undefined {

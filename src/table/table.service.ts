@@ -1,8 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {
-  Injectable,
-  NotFoundException
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { handleError } from '../utils/handle-error.util';
@@ -66,5 +63,4 @@ export class TableService {
       where: { id },
     });
   }
-
 }

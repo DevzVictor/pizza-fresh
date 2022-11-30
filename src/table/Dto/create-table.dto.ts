@@ -6,7 +6,7 @@ export class CreateTableDto {
   @IsNumber()
   @IsPositive()
   @ApiProperty({
-    description: "O numero da mesa",
+    description: 'O numero da mesa',
     example: 1,
   })
   number: number;
